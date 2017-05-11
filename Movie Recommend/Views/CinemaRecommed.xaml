@@ -1,0 +1,61 @@
+﻿<Page
+    x:Class="Movie_Recommend.Views.CinemaRecommed"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Movie_Recommend.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:viewmodel="using:Movie_Recommend.ViewModel"
+    mc:Ignorable="d">
+    <Page.DataContext>
+        <viewmodel:CinemaRecommendViewModel></viewmodel:CinemaRecommendViewModel>
+    </Page.DataContext>
+    <Page.Resources>
+        <local:Converter x:Key="Converter"></local:Converter>
+    </Page.Resources>
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="12*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#FF9B9B8E">
+            <StackPanel VerticalAlignment="Bottom">
+                <Button Name="AddRange" Content="加大搜索范围" Click="AddRange_Click" HorizontalAlignment="Right"/>
+                <TextBlock Text="显示距离最近的前20家" HorizontalAlignment="Right" FontSize="10"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <ListView Name="CinemaListView" Grid.Column="0" Margin="60,0,0,0" ItemsSource="{Binding poiresult}" SelectionChanged="CinemaListView_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding name}" FontSize="22" FontWeight="Bold" FontFamily="SimHei"/>
+                                <TextBlock Text="{Binding address}" TextWrapping="Wrap" HorizontalAlignment="Left" FontSize="16" />
+                                <TextBlock Text="{Binding tel}" TextWrapping="Wrap" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding distance,Converter={StaticResource Converter}}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Maps:MapControl
+                Name="MyMap"
+                MapServiceToken = "z77tbTF4CjuksZultxVr~pODkSuAt2Nrcl71qbXWjLw~AmD7-YRO0Ookqz6I_DLxJHoykLFnn0eSusNZwPk5-HAun2oVbq3_YBUjoEGpSGqc"
+                Grid.Row="1"
+                ZoomInteractionMode="GestureAndControl"
+                TiltInteractionMode="GestureAndControl"
+                LandmarksVisible="True"
+                PedestrianFeaturesVisible ="True"
+                TrafficFlowVisible="False"
+                Grid.Column="1"
+                >
+            </Maps:MapControl>
+        </Grid>
+    </Grid>
+</Page>
