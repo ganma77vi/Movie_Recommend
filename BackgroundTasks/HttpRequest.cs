@@ -1,17 +1,16 @@
-﻿using Movie_Recommend.ShareHelper;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.System;
-using Windows.UI.Popups;
 
-namespace Movie_Recommend.Httprequest
+namespace BackgroundTasks
 {
-    public class HttpRequest
+    class HttpRequest
     {
         public static async Task<string> GetRecentMovieInformationRequest(string city)
         {
@@ -19,20 +18,7 @@ namespace Movie_Recommend.Httprequest
             HttpClient httpclient = new HttpClient();
             HttpResponseMessage response = new HttpResponseMessage();
             string result = null;
-            string Api = RecentMovieInformation_Api.Replace("{0}",city);
-            response = await httpclient.GetAsync(Api);
-            result = await response.Content.ReadAsStringAsync();
-            return result;
-        }
-        public static async Task<string> GetPositionSearchRequest(string Location, double SerchRange)
-        {
-
-            const string MovieSearch_Api = "http://restapi.amap.com/v3/place/around?key=a3a90de8b27f31e0054c34e61e0e3d9f&location={0}&keywords=电影院&radius={1} ";
-            HttpClient httpclient = new HttpClient();
-            HttpResponseMessage response = new HttpResponseMessage();
-            string result = null;
-            string Api = MovieSearch_Api.Replace("{0}", Location);
-            Api = Api.Replace("{1}", SerchRange.ToString());
+            string Api = RecentMovieInformation_Api.Replace("{0}", city);
             response = await httpclient.GetAsync(Api);
             result = await response.Content.ReadAsStringAsync();
             return result;
@@ -62,17 +48,13 @@ namespace Movie_Recommend.Httprequest
                     }
                 case GeolocationAccessStatus.Denied:
                     {
-                        var dialog = new MessageDialog("已拒绝程序对位置的访问权,请至设置-隐私-位置中打开本程序的位置访问权限", "异常提示");
-                        dialog.Commands.Add(new UICommand("确定", cmd => { }));
-                        var a = await dialog.ShowAsync();
+                        Debug.WriteLine("已拒绝程序对位置的访问权,请至设置-隐私-位置中打开本程序的位置访问权限");
                         bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
                         return "0";
                     }
                 case GeolocationAccessStatus.Unspecified:
                     {
-                        var dialog = new MessageDialog("未指明程序对位置的访问权,请至设置-隐私-位置中打开本程序的位置访问权限", "异常提示");
-                        dialog.Commands.Add(new UICommand("确定", cmd => { }));
-                        var a = await dialog.ShowAsync();
+                        Debug.WriteLine("未指明程序对位置的访问权,请至设置-隐私-位置中打开本程序的位置访问权限");
                         bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
                         return "1";
                     }

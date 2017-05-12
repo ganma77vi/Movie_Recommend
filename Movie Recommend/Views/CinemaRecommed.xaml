@@ -20,9 +20,15 @@
             <RowDefinition Height="12*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="#FF9B9B8E">
-            <StackPanel VerticalAlignment="Bottom">
-                <Button Name="AddRange" Content="加大搜索范围" Click="AddRange_Click" HorizontalAlignment="Right"/>
-                <TextBlock Text="显示距离最近的前20家" HorizontalAlignment="Right" FontSize="10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel VerticalAlignment="Bottom" Margin="0,0,20,0">
+                    <Button Name="Map" Content="打开本机地图导航" Click="Map_Click" HorizontalAlignment="Right"/>
+                    <TextBlock Text="      " HorizontalAlignment="Right" FontSize="10"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Bottom">
+                    <Button Name="AddRange" Content="加大搜索范围" Click="AddRange_Click" HorizontalAlignment="Right"/>
+                    <TextBlock Text="显示距离最近的前20家" HorizontalAlignment="Right" FontSize="10"/>
+                </StackPanel>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">

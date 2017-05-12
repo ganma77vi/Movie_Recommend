@@ -98,7 +98,7 @@ namespace Movie_Recommend.Views
             {
                 json = await Httprequest.HttpRequest.GetPositionSearchRequest(position, SerchRange);
             }
-            catch(HttpRequestException e)
+            catch(HttpRequestException)
             {
                 var dialog = new MessageDialog("周边检索异常(未能成功发送请求)", "异常提示");
                 dialog.Commands.Add(new UICommand("确定", cmd => { }));
@@ -175,10 +175,16 @@ namespace Movie_Recommend.Views
                 await MyMap.TrySetViewBoundsAsync(
                       routeResult.Route.BoundingBox,
                       null,
-                      Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+                      MapAnimationKind.None);
             }
         }
-
+        private async void Map_Click(object sender, RoutedEventArgs e)
+        {
+            var uri = new Uri("bingmaps:");
+            var launcherOptions = new LauncherOptions();
+            launcherOptions.TargetApplicationPackageFamilyName = "Microsoft.WindowsMaps_8wekyb3d8bbwe";
+            bool result = await Launcher.LaunchUriAsync(uri,launcherOptions);
+        }
     }
     public class Converter : IValueConverter
     {

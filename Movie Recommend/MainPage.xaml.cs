@@ -25,6 +25,8 @@ using SQLite.Net.Attributes;
 using Windows.Storage;
 using Movie_Recommend.HelperClass;
 using System.Net.Http;
+using Newtonsoft.Json.Linq;
+using Windows.ApplicationModel.Background;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
 
@@ -41,6 +43,8 @@ namespace Movie_Recommend
         Rootobject2 CityModel;
         SQLiteHelper sqliteHelper = new SQLiteHelper();
         string city;
+        private const string taskName = "BlogFeedBackgroundTask";
+        private const string taskEntryPoint = "BackgroundTasks.BlogFeedBackgroundTask";
         public MainPage()
         {
             this.InitializeComponent();
@@ -88,8 +92,8 @@ namespace Movie_Recommend
         private async Task FirstStep()
         {
             string json1="1";
-            //try
-            //{
+            try
+            {
                 json1 = await Httprequest.HttpRequest.GetCity();
                 if (json1 != "0" && json1 != "1" && json1 != "2")
                     CityModel = JsonConvert.DeserializeObject<Rootobject2>(json1);
@@ -103,18 +107,18 @@ namespace Movie_Recommend
                 {
                     city = CityModel.regeocode.addressComponent.city.ToString();
                 }
-            //}
-            //catch(HttpRequestException e)
-            //{
-            //    var dialog = new MessageDialog("获取城市定位异常(未能成功发送请求)，已默认为北京市", "异常提示");
-            //    dialog.Commands.Add(new UICommand("确定",cmd=> { }));
-            //    dialog.Commands.Add(new UICommand("重新获取",new UICommandInvokedHandler(this.CommandInvokedHandler)));
-            //    var a= await dialog.ShowAsync();
-            //    if(a.Label=="重新获取")
-            //    {
-            //        return;
-            //    }
-            //}
+            }
+            catch (HttpRequestException)
+            {
+                var dialog = new MessageDialog("获取城市定位异常(未能成功发送请求,建议检查网络环境)，已默认为北京市", "异常提示");
+                dialog.Commands.Add(new UICommand("确定", cmd => { }));
+                dialog.Commands.Add(new UICommand("重新获取", new UICommandInvokedHandler(this.CommandInvokedHandler)));
+                var a = await dialog.ShowAsync();
+                if (a.Label == "重新获取")
+                {
+                    return;
+                }
+            }
             try
             {
                 string json = await Httprequest.HttpRequest.GetRecentMovieInformationRequest(city);
@@ -260,9 +264,9 @@ namespace Movie_Recommend
                     }
                 }
             }
-            catch(HttpRequestException e)
+            catch(HttpRequestException)
             {
-                var dialog = new MessageDialog("获取影讯异常(未能成功发送请求)", "异常提示");
+                var dialog = new MessageDialog("获取影讯异常(未能成功发送请求,建议检查网络环境)", "异常提示");
                 dialog.Commands.Add(new UICommand("确定", cmd => { }));
                 await dialog.ShowAsync();
                 Button button = new Button();
@@ -278,6 +282,7 @@ namespace Movie_Recommend
         {
             base.OnNavigatedTo(e);
             listview1.SelectedIndex = 0;
+            this.RegisterBackgroundTask();
             await FirstStep();
         }
 
@@ -365,6 +370,23 @@ namespace Movie_Recommend
         {
             mygrid.Children.Remove(sender as Button);
             await FirstStep();
+        }
+        private async void RegisterBackgroundTask()
+        {
+            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+            foreach (var task in BackgroundTaskRegistration.AllTasks)
+            {
+                if (task.Value.Name == taskName)
+                {
+                    task.Value.Unregister(true);
+                }
+            }
+
+            BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+            taskBuilder.Name = taskName;
+            taskBuilder.TaskEntryPoint = taskEntryPoint;
+            taskBuilder.SetTrigger(new TimeTrigger(15, false));
+            var registration = taskBuilder.Register();
         }
     }
 }

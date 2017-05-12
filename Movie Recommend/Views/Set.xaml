@@ -7,6 +7,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="12*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#FF9B9B8E">
+            <TextBlock Text="设置" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="实在不知道应该在设置里写些什么了，也可能是写的有点累了想让它赶紧上架，如果大家有什么好的建议，我会给这个练手的小程序加上的~
+                       (UI写的真的蛮丑- -大家不要介意)
+                                                                有问题的话可以加我的QQ：799719374" TextWrapping="Wrap" Width="500"/>
+                <TextBlock Text="下面是github的地址,欢迎大家来交流(◍•̅ ȷ̫ •̅◍)" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <HyperlinkButton Content="https://github.com/ganma77vi/Movie_Recommend" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
