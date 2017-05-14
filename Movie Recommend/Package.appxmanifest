@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="7cfba06a-7c6f-49e1-b11c-41acdb984503" Publisher="CN=Jin" Version="1.0.0.0" />
+  <Identity Name="597196AB2CAAE.MovieRecommend" Publisher="CN=C13D6353-A23E-4F32-889F-5527F5795170" Version="1.1.3.0" />
   <mp:PhoneIdentity PhoneProductId="7cfba06a-7c6f-49e1-b11c-41acdb984503" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Movie Recommend</DisplayName>
-    <PublisherDisplayName>Jin</PublisherDisplayName>
+    <PublisherDisplayName>风呼莫邪</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
